@@ -11,7 +11,7 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-ibm-plex-arabic)", "sans-serif"],
+        sans: ["var(--font-cairo)", "sans-serif"],
         mono: ["var(--font-jetbrains-mono)", "monospace"],
       },
       colors: {

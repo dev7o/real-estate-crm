@@ -8,12 +8,13 @@
   }
 
   body {
-    @apply bg-surface text-ink font-sans antialiased;
+    @apply font-sans antialiased;
     font-feature-settings: "tnum" 1;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   * {
-    @apply border-navy-100;
+    @apply border-navy-100 dark:border-navy-800;
   }
 
   ::selection {
@@ -39,6 +40,18 @@
     width: 6px;
   }
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    @apply bg-navy-100 rounded-full;
+    @apply bg-navy-100 dark:bg-navy-700 rounded-full;
+  }
+  
+  .glass {
+    @apply bg-white/70 dark:bg-navy-900/70 backdrop-blur-md border border-white/20 dark:border-navy-700/50 shadow-sm;
+  }
+  
+  .glass-card {
+    @apply bg-white/80 dark:bg-navy-800/80 backdrop-blur-lg border border-white/40 dark:border-navy-700/60 shadow-raised;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-gold to-gold-light;
   }
 }

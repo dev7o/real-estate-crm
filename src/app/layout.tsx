@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Sans_Arabic, JetBrains_Mono } from "next/font/google";
+import { Cairo, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
 
-const ibmPlexArabic = IBM_Plex_Sans_Arabic({
+const cairo = Cairo({
   subsets: ["arabic"],
   weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-ibm-plex-arabic",
+  variable: "--font-cairo",
   display: "swap",
 });
 
@@ -23,8 +24,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ar" dir="rtl" className={`${ibmPlexArabic.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
-      <body suppressHydrationWarning>{children}</body>
+    <html lang="ar" dir="rtl" suppressHydrationWarning>
+      <body className={`${cairo.variable} ${jetbrainsMono.variable} font-sans antialiased bg-surface dark:bg-navy-900 text-ink dark:text-navy-50`} suppressHydrationWarning>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
