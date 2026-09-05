@@ -1,0 +1,335 @@
+// ============================================================================
+// نظام متابعة مبيعات العقارات — Prisma Schema
+// قاعدة بيانات SQLite محلية — قابلة للترحيل لـ PostgreSQL لاحقًا بتغيير provider
+// ============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// المستخدمون والأدوار
+// ---------------------------------------------------------------------------
+
+enum Role {
+  ADMIN // مدير عام
+  SALES_MANAGER // مدير مبيعات
+  SALES_REP // مندوب مبيعات
+  FINANCE // مالي / تحصيل
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  role      Role     @default(SALES_REP)
+  phone     String?
+  avatarUrl String?
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  leads        Lead[]
+  deals        Deal[]
+  siteVisits   SiteVisit[]
+  activities   Activity[]
+  reservations Reservation[]
+
+  @@map("users")
+}
+
+// ---------------------------------------------------------------------------
+// المشاريع والوحدات العقارية (Inventory)
+// ---------------------------------------------------------------------------
+
+enum ProjectStatus {
+  PLANNING // تحت التخطيط
+  UNDER_CONSTRUCTION // تحت الإنشاء
+  READY // جاهز للتسليم
+  DELIVERED // تم التسليم
+}
+
+model Project {
+  id          String        @id @default(cuid())
+  name        String
+  developer   String
+  city        String
+  district    String?
+  description String?
+  coverImage  String?
+  status      ProjectStatus @default(UNDER_CONSTRUCTION)
+  deliveryDate DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  units Unit[]
+
+  @@map("projects")
+}
+
+enum UnitType {
+  APARTMENT // شقة
+  VILLA // فيلا
+  TOWNHOUSE // تاون هاوس
+  LAND // أرض
+  OFFICE // مكتب
+  SHOP // محل تجاري
+}
+
+enum UnitStatus {
+  AVAILABLE // متاحة
+  RESERVED // محجوزة مؤقتًا
+  SOLD // مباعة / متعاقد عليها
+}
+
+model Unit {
+  id         String     @id @default(cuid())
+  code       String // رقم الوحدة
+  projectId  String
+  project    Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  type       UnitType   @default(APARTMENT)
+  floor      Int?
+  areaSqm    Float
+  bedrooms   Int?
+  price      Float
+  status     UnitStatus @default(AVAILABLE)
+  imageUrl   String?
+  notes      String?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  deals        Deal[]
+  siteVisits   SiteVisit[]
+  reservations Reservation[]
+
+  @@unique([projectId, code])
+  @@map("units")
+}
+
+// ---------------------------------------------------------------------------
+// العملاء المحتملون (Leads)
+// ---------------------------------------------------------------------------
+
+enum LeadSource {
+  ADVERTISEMENT // إعلان
+  REFERRAL // إحالة
+  EXHIBITION // معرض عقاري
+  WEBSITE // موقع إلكتروني
+  INBOUND_CALL // مكالمة واردة
+  OTHER // أخرى
+}
+
+enum LeadPurpose {
+  RESIDENTIAL // سكن
+  INVESTMENT // استثمار
+}
+
+enum LeadStatus {
+  NEW // جديد
+  CONTACTED // تم التواصل
+  QUALIFIED // مؤهل
+  UNQUALIFIED // غير مؤهل
+}
+
+model Lead {
+  id             String      @id @default(cuid())
+  name           String
+  phone          String
+  email          String?
+  source         LeadSource  @default(OTHER)
+  status         LeadStatus  @default(NEW)
+  purpose        LeadPurpose @default(RESIDENTIAL)
+  budgetMin      Float?
+  budgetMax      Float?
+  preferredCity  String?
+  preferredRooms Int?
+  notes          String?
+  assignedToId   String?
+  assignedTo     User?       @relation(fields: [assignedToId], references: [id])
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  deals      Deal[]
+  siteVisits SiteVisit[]
+  activities Activity[]
+
+  @@map("leads")
+}
+
+// ---------------------------------------------------------------------------
+// خط أنابيب المبيعات (Pipeline / Deals)
+// ---------------------------------------------------------------------------
+
+enum DealStage {
+  NEW_INQUIRY // استفسار جديد
+  CONTACTED // تم التواصل
+  VISIT_SCHEDULED // معاينة مجدولة
+  VISIT_COMPLETED // معاينة تمت
+  NEGOTIATION // تفاوض على السعر
+  RESERVED // حجز مبدئي
+  CONTRACTED // تعاقد نهائي
+  CLOSED_LOST // مغلق خاسر
+}
+
+enum LossReason {
+  PRICE // السعر
+  LOCATION // الموقع
+  FINANCING // التمويل
+  CUSTOMER_WITHDREW // تراجع العميل
+  OTHER // أخرى
+}
+
+model Deal {
+  id           String      @id @default(cuid())
+  title        String
+  leadId       String
+  lead         Lead        @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  unitId       String?
+  unit         Unit?       @relation(fields: [unitId], references: [id])
+  ownerId      String?
+  owner        User?       @relation(fields: [ownerId], references: [id])
+  stage        DealStage   @default(NEW_INQUIRY)
+  value        Float
+  lossReason   LossReason?
+  expectedCloseDate DateTime?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  activities   Activity[]
+  reservation  Reservation?
+
+  @@map("deals")
+}
+
+// ---------------------------------------------------------------------------
+// المعاينات الميدانية (Site Visits)
+// ---------------------------------------------------------------------------
+
+enum VisitOutcome {
+  PENDING // لم تتم بعد
+  INTERESTED // مهتم
+  NOT_INTERESTED // غير مهتم
+  NEEDS_DECISION // يحتاج قرار
+  REQUESTED_ANOTHER // يطلب معاينة أخرى
+}
+
+model SiteVisit {
+  id         String       @id @default(cuid())
+  leadId     String
+  lead       Lead         @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  unitId     String?
+  unit       Unit?        @relation(fields: [unitId], references: [id])
+  repId      String?
+  rep        User?        @relation(fields: [repId], references: [id])
+  scheduledAt DateTime
+  outcome    VisitOutcome @default(PENDING)
+  notes      String?
+  createdAt  DateTime     @default(now())
+
+  @@map("site_visits")
+}
+
+// ---------------------------------------------------------------------------
+// الحجوزات والعقود وخطط السداد
+// ---------------------------------------------------------------------------
+
+enum ReservationStatus {
+  ACTIVE // ساري
+  CONVERTED // تحول لعقد
+  EXPIRED // منتهي الصلاحية
+  CANCELLED // ملغى
+}
+
+model Reservation {
+  id            String             @id @default(cuid())
+  dealId        String             @unique
+  deal          Deal               @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  unitId        String
+  unit          Unit               @relation(fields: [unitId], references: [id])
+  repId         String?
+  rep           User?              @relation(fields: [repId], references: [id])
+  downPayment   Float
+  status        ReservationStatus  @default(ACTIVE)
+  expiresAt     DateTime
+  createdAt     DateTime           @default(now())
+
+  contract Contract?
+
+  @@map("reservations")
+}
+
+model Contract {
+  id            String        @id @default(cuid())
+  reservationId String        @unique
+  reservation   Reservation   @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  contractNumber String       @unique
+  totalValue    Float
+  signedAt      DateTime      @default(now())
+  documentUrl   String?
+  createdAt     DateTime      @default(now())
+
+  paymentPlan PaymentPlan?
+
+  @@map("contracts")
+}
+
+enum InstallmentStatus {
+  PENDING // مستحق لاحقًا
+  PAID // مدفوع
+  OVERDUE // متأخر
+}
+
+model PaymentPlan {
+  id         String   @id @default(cuid())
+  contractId String   @unique
+  contract   Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  installments Installment[]
+
+  @@map("payment_plans")
+}
+
+model Installment {
+  id            String            @id @default(cuid())
+  paymentPlanId String
+  paymentPlan   PaymentPlan       @relation(fields: [paymentPlanId], references: [id], onDelete: Cascade)
+  label         String // مثال: "الدفعة الأولى", "القسط 1"
+  amount        Float
+  dueDate       DateTime
+  status        InstallmentStatus @default(PENDING)
+  paidAt        DateTime?
+
+  @@map("installments")
+}
+
+// ---------------------------------------------------------------------------
+// سجل النشاطات (Activity Timeline)
+// ---------------------------------------------------------------------------
+
+enum ActivityType {
+  NOTE
+  CALL
+  EMAIL
+  STATUS_CHANGE
+  STAGE_CHANGE
+}
+
+model Activity {
+  id        String       @id @default(cuid())
+  leadId    String?
+  lead      Lead?        @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  dealId    String?
+  deal      Deal?        @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  userId    String?
+  user      User?        @relation(fields: [userId], references: [id])
+  type      ActivityType @default(NOTE)
+  content   String
+  createdAt DateTime     @default(now())
+
+  @@map("activities")
+}

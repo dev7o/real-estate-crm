@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    direction: rtl;
+  }
+
+  body {
+    @apply bg-surface text-ink font-sans antialiased;
+    font-feature-settings: "tnum" 1;
+  }
+
+  * {
+    @apply border-navy-100;
+  }
+
+  ::selection {
+    @apply bg-gold/25;
+  }
+
+  /* أرقام الأسعار والمعرّفات تُعرض دائمًا بخط أحادي المسافة LTR داخل سياق RTL */
+  .figure {
+    font-family: var(--font-jetbrains-mono), monospace;
+    direction: ltr;
+    unicode-bidi: isolate;
+  }
+
+  :focus-visible {
+    outline: 2px solid theme("colors.gold.DEFAULT");
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin::-webkit-scrollbar {
+    height: 6px;
+    width: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-navy-100 rounded-full;
+  }
+}
