@@ -49,11 +49,6 @@ export function Sidebar() {
       </AnimatePresence>
 
       <motion.aside 
-        initial={false}
-        animate={{ 
-          x: isOpen ? 0 : "100%", // Slide from right in RTL, or we can use generic 0/-100% based on direction. Let's rely on standard classes first.
-        }}
-        // Using CSS classes for the main responsive behavior is more robust alongside motion.
         className={cn(
           "fixed inset-y-0 right-0 z-50 flex h-screen w-72 flex-col bg-navy-900/95 dark:bg-navy-950/95 backdrop-blur-xl text-white shadow-2xl border-l border-white/5 transition-transform duration-300 md:relative md:w-64 md:translate-x-0",
           isOpen ? "translate-x-0" : "translate-x-full"
