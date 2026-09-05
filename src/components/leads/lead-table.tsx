@@ -6,22 +6,23 @@ import { LEAD_SOURCE_LABELS, LEAD_STATUS_LABELS, LEAD_STATUS_COLORS } from "@/li
 import { formatDate } from "@/lib/utils";
 import type { Lead, User } from "@prisma/client";
 import { motion } from "framer-motion";
+import type { Variants } from "framer-motion";
 
 type LeadRow = Lead & { assignedTo: User | null; _count: { deals: number; siteVisits: number } };
 
-const container = {
+const container: Variants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1
+      staggerChildren: 0.07
     }
   }
 };
 
-const item = {
-  hidden: { opacity: 0, y: 10 },
-  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300 } }
+const item: Variants = {
+  hidden: { opacity: 0, y: 12 },
+  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 260, damping: 20 } }
 };
 
 export function LeadTable({ leads }: { leads: LeadRow[] }) {

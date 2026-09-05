@@ -15,6 +15,7 @@ import {
   Building,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
   { href: "/dashboard", label: "لوحة التحكم", icon: LayoutDashboard, accent: "#B8934A" },

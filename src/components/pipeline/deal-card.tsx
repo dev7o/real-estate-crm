@@ -19,11 +19,14 @@ export function DealCard({ deal, draggable, onDragStart }: {
   return (
     <motion.div
       whileHover={{ y: -4, scale: 1.02 }}
-      whileTap={{ scale: 0.98, cursor: "grabbing" }}
-      draggable={draggable}
-      onDragStart={onDragStart}
-      className="cursor-grab space-y-3 rounded-xl border border-white/40 dark:border-navy-700/60 glass-card p-4 shadow-sm transition-all hover:shadow-lg dark:hover:shadow-navy-900/50 relative overflow-hidden group"
+      whileTap={{ scale: 0.98 }}
+      className="cursor-grab space-y-3 rounded-xl border border-white/40 dark:border-navy-700/60 glass-card shadow-sm transition-all hover:shadow-lg dark:hover:shadow-navy-900/50 relative overflow-hidden group"
     >
+      <div
+        draggable={draggable}
+        onDragStart={onDragStart}
+        className="p-4 h-full"
+      >
       <div className="absolute inset-0 bg-gradient-to-br from-module-pipeline/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
       
       <p className="text-sm font-bold text-ink dark:text-navy-50 relative z-10">{deal.title}</p>
@@ -48,6 +51,7 @@ export function DealCard({ deal, draggable, onDragStart }: {
             {deal.owner.name.slice(0, 2)}
           </span>
         )}
+      </div>
       </div>
     </motion.div>
   );

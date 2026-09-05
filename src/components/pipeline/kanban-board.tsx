@@ -12,20 +12,21 @@ import { DEAL_STAGES, LOSS_REASON_LABELS } from "@/lib/constants";
 import { formatCurrency } from "@/lib/utils";
 import type { DealStage, LossReason } from "@prisma/client";
 import { motion } from "framer-motion";
+import type { Variants } from "framer-motion";
 
-const container = {
+const container: Variants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1
+      staggerChildren: 0.08
     }
   }
 };
 
-const columnAnim = {
+const columnAnim: Variants = {
   hidden: { opacity: 0, x: 20 },
-  show: { opacity: 1, x: 0, transition: { type: "spring", stiffness: 300 } }
+  show: { opacity: 1, x: 0, transition: { type: "spring", stiffness: 260, damping: 22 } }
 };
 
 export function KanbanBoard({ deals }: { deals: DealCardData[] }) {
