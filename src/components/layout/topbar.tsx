@@ -1,3 +1,5 @@
+"use client";
+
 import { Search, Bell } from "lucide-react";
 import { ThemeToggle } from "../theme-toggle";
 import { motion } from "framer-motion";

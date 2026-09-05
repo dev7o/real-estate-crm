@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ar" dir="rtl" suppressHydrationWarning>
-      <body className={`${cairo.variable} ${jetbrainsMono.variable} font-sans antialiased bg-surface dark:bg-navy-900 text-ink dark:text-navy-50`} suppressHydrationWarning>
+      <body className={`${cairo.variable} ${jetbrainsMono.variable} font-sans antialiased dark:bg-navy-900 dark:text-navy-50`} suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
