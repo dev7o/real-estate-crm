@@ -275,6 +275,7 @@ async function main() {
   console.log("✅ تمت تعبئة قاعدة البيانات بنجاح");
   console.log(`   ${5} مستخدمين، ${3} مشاريع، ${wahaUnits.length + marsaUnits.length + nakheelUnits.length} وحدات`);
   console.log(`   ${5} عملاء محتملين، ${7} صفقات، ${2} عقود موقّعة`);
+  process.exit(0);
 }
 
 main()
