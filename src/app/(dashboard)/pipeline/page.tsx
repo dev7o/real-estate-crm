@@ -18,7 +18,7 @@ export default async function PipelinePage() {
     <>
       <Topbar title="متابعة المبيعات" subtitle="اسحب الصفقة بين المراحل لتحديث حالتها فورًا" />
 
-      <div className="space-y-4 p-8">
+      <div className="space-y-4 p-4 md:p-8">
         <div className="flex items-center justify-end">
           <NewDealButton leads={leads} units={units} users={users} />
         </div>
@@ -27,3 +27,4 @@ export default async function PipelinePage() {
     </>
   );
 }
+

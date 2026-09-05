@@ -25,7 +25,7 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
     <>
       <Topbar title={lead.name} subtitle={`عميل محتمل منذ ${formatDate(lead.createdAt)}`} />
 
-      <div className="grid grid-cols-1 gap-6 p-8 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 p-4 md:p-8 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-1">
           <Card>
             <CardHeader>

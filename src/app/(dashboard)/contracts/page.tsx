@@ -25,7 +25,7 @@ export default async function ContractsPage() {
     <>
       <Topbar title="العقود الموقّعة" subtitle={`${contracts.length} عقد نهائي`} />
 
-      <div className="space-y-4 p-8">
+      <div className="space-y-4 p-4 md:p-8">
         {contracts.length > 0 ? (
           <div className="space-y-3">
             {contracts.map((c) => {
@@ -70,3 +70,4 @@ export default async function ContractsPage() {
     </>
   );
 }
+

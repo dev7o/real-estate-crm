@@ -26,7 +26,7 @@ export default async function PaymentsPage() {
     <>
       <Topbar title="التحصيل وخطط السداد" subtitle={`${plans.length} خطة سداد نشطة`} />
 
-      <div className="space-y-6 p-8">
+      <div className="space-y-6 p-4 md:p-8">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <StatCard label="إجمالي المحصّل" value={formatCurrency(paidTotal)} icon={CheckCircle2} accent="#2F7D4F" />
           <StatCard
@@ -60,3 +60,4 @@ export default async function PaymentsPage() {
     </>
   );
 }
+

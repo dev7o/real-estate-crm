@@ -18,7 +18,7 @@ export default async function SettingsPage() {
     <>
       <Topbar title="الإعدادات" subtitle="المستخدمون والصلاحيات" />
 
-      <div className="space-y-6 p-8">
+      <div className="space-y-6 p-4 md:p-8">
         <Card>
           <CardHeader>
             <CardTitle>المستخدمون والأدوار</CardTitle>
@@ -80,3 +80,4 @@ export default async function SettingsPage() {
     </>
   );
 }
+

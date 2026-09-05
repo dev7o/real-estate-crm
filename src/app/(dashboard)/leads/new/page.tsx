@@ -8,9 +8,10 @@ export default async function NewLeadPage() {
   return (
     <>
       <Topbar title="إضافة عميل محتمل" subtitle="سجّل بيانات العميل وتفضيلاته العقارية" />
-      <div className="mx-auto max-w-3xl p-8">
+      <div className="mx-auto max-w-3xl p-4 md:p-8">
         <LeadForm users={users} />
       </div>
     </>
   );
 }
+

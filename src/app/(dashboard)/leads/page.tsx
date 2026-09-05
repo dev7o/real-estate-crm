@@ -13,7 +13,7 @@ export default async function LeadsPage() {
     <>
       <Topbar title="العملاء المحتملون" subtitle={`إجمالي ${leads.length} عميل مسجّل`} />
 
-      <div className="space-y-4 p-8">
+      <div className="space-y-4 p-4 md:p-8">
         <div className="flex items-center justify-end">
           <Link href="/leads/new">
             <Button variant="gold">
@@ -44,3 +44,4 @@ export default async function LeadsPage() {
     </>
   );
 }
+

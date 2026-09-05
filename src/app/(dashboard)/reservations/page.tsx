@@ -23,7 +23,7 @@ export default async function ReservationsPage() {
     <>
       <Topbar title="الحجوزات والعقود" subtitle={`${reservations.length} حجز مسجّل`} />
 
-      <div className="space-y-4 p-8">
+      <div className="space-y-4 p-4 md:p-8">
         <div className="flex items-center justify-end">
           <NewReservationButton deals={deals} units={units} users={users} />
         </div>
@@ -37,3 +37,4 @@ export default async function ReservationsPage() {
     </>
   );
 }
+

@@ -27,7 +27,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     <>
       <Topbar title={project.name} subtitle={`تطوير ${project.developer}`} />
 
-      <div className="space-y-6 p-8">
+      <div className="space-y-6 p-4 md:p-8">
         <Card className="border-r-4" style={{ borderRightColor: "#A85327" }}>
           <CardContent className="grid grid-cols-1 gap-6 p-6 sm:grid-cols-2 lg:grid-cols-4">
             <div className="flex items-center gap-3">

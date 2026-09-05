@@ -19,7 +19,7 @@ export default async function ReportsPage() {
     <>
       <Topbar title="التقارير والتحليلات" subtitle="أداء الفريق، المشاريع، ومصادر العملاء" />
 
-      <div className="space-y-6 p-8">
+      <div className="space-y-6 p-4 md:p-8">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <Card>
             <CardHeader>
@@ -125,3 +125,4 @@ export default async function ReportsPage() {
     </>
   );
 }
+

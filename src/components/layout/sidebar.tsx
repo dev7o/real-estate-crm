@@ -14,8 +14,9 @@ import {
   Settings,
   Building,
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useSidebar } from "./sidebar-context";
 
 const NAV_ITEMS = [
   { href: "/dashboard", label: "لوحة التحكم", icon: LayoutDashboard, accent: "#B8934A" },
@@ -30,14 +31,34 @@ const NAV_ITEMS = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { isOpen, setIsOpen } = useSidebar();
 
   return (
-    <motion.aside 
-      initial={{ x: 100, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className="flex h-screen w-64 flex-col bg-navy-900/95 dark:bg-navy-950/95 backdrop-blur-xl text-white shadow-2xl border-l border-white/5"
-    >
+    <>
+      {/* Mobile Overlay */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsOpen(false)}
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
+          />
+        )}
+      </AnimatePresence>
+
+      <motion.aside 
+        initial={false}
+        animate={{ 
+          x: isOpen ? 0 : "100%", // Slide from right in RTL, or we can use generic 0/-100% based on direction. Let's rely on standard classes first.
+        }}
+        // Using CSS classes for the main responsive behavior is more robust alongside motion.
+        className={cn(
+          "fixed inset-y-0 right-0 z-50 flex h-screen w-72 flex-col bg-navy-900/95 dark:bg-navy-950/95 backdrop-blur-xl text-white shadow-2xl border-l border-white/5 transition-transform duration-300 md:relative md:w-64 md:translate-x-0",
+          isOpen ? "translate-x-0" : "translate-x-full"
+        )}
+      >
       <div className="flex items-center gap-3 border-b border-white/10 px-6 py-6">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-gold to-gold-dark shadow-lg">
           <Building className="h-5 w-5 text-white" />
@@ -53,7 +74,7 @@ export function Sidebar() {
           const active = pathname === item.href || pathname?.startsWith(item.href + "/");
           const Icon = item.icon;
           return (
-            <Link key={item.href} href={item.href}>
+            <Link key={item.href} href={item.href} onClick={() => setIsOpen(false)}>
               <motion.div
                 whileHover={{ x: -4 }}
                 whileTap={{ scale: 0.98 }}
@@ -101,5 +122,6 @@ export function Sidebar() {
         </Link>
       </div>
     </motion.aside>
+    </>
   );
 }

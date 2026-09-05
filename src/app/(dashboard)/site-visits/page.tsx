@@ -19,7 +19,7 @@ export default async function SiteVisitsPage() {
     <>
       <Topbar title="المعاينات الميدانية" subtitle={`${visits.length} معاينة مجدولة`} />
 
-      <div className="space-y-4 p-8">
+      <div className="space-y-4 p-4 md:p-8">
         <div className="flex items-center justify-end">
           <ScheduleVisitButton leads={leads} units={units} users={users} />
         </div>
@@ -33,3 +33,4 @@ export default async function SiteVisitsPage() {
     </>
   );
 }
+

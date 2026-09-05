@@ -1,20 +1,31 @@
 "use client";
 
-import { Search, Bell } from "lucide-react";
+import { Search, Bell, Menu } from "lucide-react";
 import { ThemeToggle } from "../theme-toggle";
 import { motion } from "framer-motion";
+import { useSidebar } from "./sidebar-context";
 
 export function Topbar({ title, subtitle }: { title: string; subtitle?: string }) {
+  const { toggle } = useSidebar();
+
   return (
     <motion.header
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="sticky top-0 z-30 flex items-center justify-between border-b border-navy-100/50 dark:border-navy-700/50 bg-white/70 dark:bg-navy-900/70 backdrop-blur-md px-8 py-4 shadow-sm"
+      className="sticky top-0 z-30 flex items-center justify-between border-b border-navy-100/50 dark:border-navy-700/50 bg-white/70 dark:bg-navy-900/70 backdrop-blur-md px-4 md:px-8 py-4 shadow-sm"
     >
-      <div>
-        <h1 className="text-xl font-bold text-ink dark:text-navy-50">{title}</h1>
-        {subtitle && <p className="mt-0.5 text-sm text-ink-muted dark:text-navy-200">{subtitle}</p>}
+      <div className="flex items-center gap-3">
+        <button
+          onClick={toggle}
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-navy-100 dark:border-navy-700 bg-white dark:bg-navy-800 text-ink-muted dark:text-navy-200 hover:bg-navy-50 dark:hover:bg-navy-700 md:hidden"
+        >
+          <Menu className="h-5 w-5" />
+        </button>
+        <div>
+          <h1 className="text-lg md:text-xl font-bold text-ink dark:text-navy-50">{title}</h1>
+          {subtitle && <p className="mt-0.5 text-xs md:text-sm text-ink-muted dark:text-navy-200 hidden sm:block">{subtitle}</p>}
+        </div>
       </div>
 
       <div className="flex items-center gap-4">

@@ -13,7 +13,7 @@ export default async function ProjectsPage() {
     <>
       <Topbar title="المشاريع والوحدات العقارية" subtitle={`${projects.length} مشروع مسجّل في المخزون`} />
 
-      <div className="space-y-6 p-8">
+      <div className="space-y-6 p-4 md:p-8">
         <div className="flex items-center justify-end">
           <Link href="/projects/new">
             <Button style={{ backgroundColor: "#A85327" }} className="text-white hover:opacity-90">
@@ -48,3 +48,4 @@ export default async function ProjectsPage() {
     </>
   );
 }
+
