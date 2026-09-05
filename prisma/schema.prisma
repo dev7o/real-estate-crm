@@ -1,6 +1,6 @@
 // ============================================================================
 // نظام متابعة مبيعات العقارات — Prisma Schema
-// قاعدة بيانات SQLite محلية — قابلة للترحيل لـ PostgreSQL لاحقًا بتغيير provider
+// قاعدة بيانات PostgreSQL (Neon) للإنتاج على Vercel
 // ============================================================================
 
 generator client {
@@ -8,8 +8,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 // ---------------------------------------------------------------------------
@@ -17,10 +17,10 @@ datasource db {
 // ---------------------------------------------------------------------------
 
 enum Role {
-  ADMIN // مدير عام
-  SALES_MANAGER // مدير مبيعات
-  SALES_REP // مندوب مبيعات
-  FINANCE // مالي / تحصيل
+  ADMIN
+  SALES_MANAGER
+  SALES_REP
+  FINANCE
 }
 
 model User {
@@ -47,10 +47,10 @@ model User {
 // ---------------------------------------------------------------------------
 
 enum ProjectStatus {
-  PLANNING // تحت التخطيط
-  UNDER_CONSTRUCTION // تحت الإنشاء
-  READY // جاهز للتسليم
-  DELIVERED // تم التسليم
+  PLANNING
+  UNDER_CONSTRUCTION
+  READY
+  DELIVERED
 }
 
 model Project {
@@ -72,18 +72,18 @@ model Project {
 }
 
 enum UnitType {
-  APARTMENT // شقة
-  VILLA // فيلا
-  TOWNHOUSE // تاون هاوس
-  LAND // أرض
-  OFFICE // مكتب
-  SHOP // محل تجاري
+  APARTMENT
+  VILLA
+  TOWNHOUSE
+  LAND
+  OFFICE
+  SHOP
 }
 
 enum UnitStatus {
-  AVAILABLE // متاحة
-  RESERVED // محجوزة مؤقتًا
-  SOLD // مباعة / متعاقد عليها
+  AVAILABLE
+  RESERVED
+  SOLD
 }
 
 model Unit {
@@ -115,24 +115,24 @@ model Unit {
 // ---------------------------------------------------------------------------
 
 enum LeadSource {
-  ADVERTISEMENT // إعلان
-  REFERRAL // إحالة
-  EXHIBITION // معرض عقاري
-  WEBSITE // موقع إلكتروني
-  INBOUND_CALL // مكالمة واردة
-  OTHER // أخرى
+  ADVERTISEMENT
+  REFERRAL
+  EXHIBITION
+  WEBSITE
+  INBOUND_CALL
+  OTHER
 }
 
 enum LeadPurpose {
-  RESIDENTIAL // سكن
-  INVESTMENT // استثمار
+  RESIDENTIAL
+  INVESTMENT
 }
 
 enum LeadStatus {
-  NEW // جديد
-  CONTACTED // تم التواصل
-  QUALIFIED // مؤهل
-  UNQUALIFIED // غير مؤهل
+  NEW
+  CONTACTED
+  QUALIFIED
+  UNQUALIFIED
 }
 
 model Lead {
@@ -165,22 +165,22 @@ model Lead {
 // ---------------------------------------------------------------------------
 
 enum DealStage {
-  NEW_INQUIRY // استفسار جديد
-  CONTACTED // تم التواصل
-  VISIT_SCHEDULED // معاينة مجدولة
-  VISIT_COMPLETED // معاينة تمت
-  NEGOTIATION // تفاوض على السعر
-  RESERVED // حجز مبدئي
-  CONTRACTED // تعاقد نهائي
-  CLOSED_LOST // مغلق خاسر
+  NEW_INQUIRY
+  CONTACTED
+  VISIT_SCHEDULED
+  VISIT_COMPLETED
+  NEGOTIATION
+  RESERVED
+  CONTRACTED
+  CLOSED_LOST
 }
 
 enum LossReason {
-  PRICE // السعر
-  LOCATION // الموقع
-  FINANCING // التمويل
-  CUSTOMER_WITHDREW // تراجع العميل
-  OTHER // أخرى
+  PRICE
+  LOCATION
+  FINANCING
+  CUSTOMER_WITHDREW
+  OTHER
 }
 
 model Deal {
@@ -210,11 +210,11 @@ model Deal {
 // ---------------------------------------------------------------------------
 
 enum VisitOutcome {
-  PENDING // لم تتم بعد
-  INTERESTED // مهتم
-  NOT_INTERESTED // غير مهتم
-  NEEDS_DECISION // يحتاج قرار
-  REQUESTED_ANOTHER // يطلب معاينة أخرى
+  PENDING
+  INTERESTED
+  NOT_INTERESTED
+  NEEDS_DECISION
+  REQUESTED_ANOTHER
 }
 
 model SiteVisit {
@@ -238,10 +238,10 @@ model SiteVisit {
 // ---------------------------------------------------------------------------
 
 enum ReservationStatus {
-  ACTIVE // ساري
-  CONVERTED // تحول لعقد
-  EXPIRED // منتهي الصلاحية
-  CANCELLED // ملغى
+  ACTIVE
+  CONVERTED
+  EXPIRED
+  CANCELLED
 }
 
 model Reservation {
@@ -278,9 +278,9 @@ model Contract {
 }
 
 enum InstallmentStatus {
-  PENDING // مستحق لاحقًا
-  PAID // مدفوع
-  OVERDUE // متأخر
+  PENDING
+  PAID
+  OVERDUE
 }
 
 model PaymentPlan {
